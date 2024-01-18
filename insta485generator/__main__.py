@@ -14,16 +14,7 @@ def read_config(config_filename):
     except FileNotFoundError:
         click.echo(f"insta485generator error: '{config_filename}' not found", err=True)
         exit(1)
-
-#read templates
-def read_template(template_dir):
-    template_dir =pathlib.Path(template_dir)
-    template_env = jinja2.Environment(
-        loader=jinja2.FileSystemLoader(str(template_dir)),
-        autoescape=jinja2.select_autoescape(['html', 'xml'])
-    )
-    return template_env
-
+        
 @click.command()
 @click.argument("input_dir", nargs=1, type=click.Path(exists=True))
 #make the output directory always be defined (if the output directory is not given, mark it as "None")
@@ -36,11 +27,20 @@ def main(input_dir,output,verbose):
         #read configuration file
         config=read_config(input_dir/"config.json")
         #read templates
-        templates=read_template(input_dir/"templates")
+        template_dir =pathlib.Path(input_dir/"templates")
+        template_env = jinja2.Environment(
+            loader=jinja2.FileSystemLoader(str(template_dir)),
+            autoescape=jinja2.select_autoescape(['html', 'xml'])
+        )
         #render template with context
         for item in config:
-            template_selected=templates.get_template(item["template"])
-            render_result=template_selected.render(item["context"])
+            try:
+                temp_name=item['template']
+                template_selected= template_env.get_template(temp_name)
+                render_result=template_selected.render(item['context'])
+            except jinja2.TemplateError as e:
+                click.echo(f"insta485generator error: '{temp_name}'\n{e.message}", err=True)
+                exit(1)
             #write rendered content to output file
             if output: 
                 output_dir = pathlib.Path(output)
@@ -54,7 +54,7 @@ def main(input_dir,output,verbose):
             with output_file.open("w") as file:
                 file.write(render_result)#could not use output_file here since we will use output_file later
             if verbose:
-                print(f"Rendered {item['template']} -> {output_file}")
+                print(f"Rendered {temp_name} -> {output_file}")
             #copy static directory
             static_dir = input_dir / 'static'
             if static_dir.exists():
@@ -63,10 +63,7 @@ def main(input_dir,output,verbose):
                 if verbose:
                     print(f"Copied {static_dir} -> {output_dir}")
     except json.JSONDecodeError as e:
-        click.echo(f"insta485generator error: '{config}'\n{e}", err=True)
-        exit(1)
-    except jinja2.TemplateSyntaxError as e:
-        click.echo(f"insta485generator error: '{template_selected}'\n{e}", err=True)
+        click.echo(f"insta485generator error: '{config}'\n{e.msg}", err=True)
         exit(1)
     except FileExistsError as e:
         click.echo(f"insta485generator error: {e}", err=True)
