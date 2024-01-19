@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--title-->
+    <title>insta485</title>
+    <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+    <!--link upper left-->
+    <a href="/" style="float: left">
+        Welcome to <br />
+        Insta485!
+    </a>
+    <!--link upper right-->
+    <a href="/explore/" style="float: right"> explore</a><br />
+    <a href="/users/{{logname}}/" style="float: right">{{logname}}</a><br />
+    <hr />
+    <main>        
+        <div class="post">
+        <!--headers-->
+        <a href="/users/{{owner}}/">
+            <img
+            src="{{owner_img_url}}"
+            alt="{{owner}}'s profile"
+            style="width: 60px; height: 60px"
+            />
+            {{owner}}
+        </a>
+        <a href="/posts/{{postid}}/" style="float: right"> 10 minutes ago </a><br />
+        <hr />
+        <!--post-->
+        <img
+            src="{{img_url}}"
+            alt="post{{postid}}"
+        />
+        <p>{{likes}} 
+            {% if likes > 1 %}
+                likes<br />
+            {% else %}
+                like<br />
+            {% endif %}
+        </p>
+        <!--comments-->
+        <p>
+            {% for comment in comments %}
+            <a href="/users/{{comment.owner}}/">{{comment.owner}}</a> {{comment.text}}<br>
+            {% endfor %}
+        </p>
+    </div>
+</main>
+</body>
+</html>

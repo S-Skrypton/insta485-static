@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--title-->
+    <title>insta485</title>
+    <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+    <!--link upper left-->
+    <a href="/" style="float: left">
+        Welcome to <br />
+        Insta485!
+    </a>
+    <!--link upper right-->
+    <a href="/explore/" style="float: right"> explore</a><br />
+    <a href="/users/{{logname}}/" style="float: right">{{logname}}</a><br />
+    <hr />
+    <main>
+        <h1>Discover People</h1><br>
+        {% for person in not_following %}
+        <div class = "followers">
+            <img src="{{person.user_img_url}}" alt="{{person.username}}"><a href="/users/{{person.username}}/">
+        </div>
+        {% endfor %}
+    </main>
+</body>
+</html>

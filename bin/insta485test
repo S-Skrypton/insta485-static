@@ -1,0 +1,32 @@
+#!/bin/bash
+#
+# insta485test
+#
+# run unit tests, check code style, clean, build and validate the htmls
+#
+# Shihui Sun <shihuis@umich.edu>
+
+# Stop on errors, print commands
+# See https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/
+set -Eeuo pipefail
+set -x
+
+# run all unit tests
+pytest tests/
+
+# code style
+pycodestyle insta485generator
+pydocstyle insta485generator
+pylint insta485generator
+
+# clean up previouse directory
+rm -rf insta485/html
+
+# generate html
+insta485generator insta485
+
+# validate hand-coded html
+html5validator --ignore JAVA_TOOL_OPTIONS --root html
+
+# validate generated html
+html5validator --ignore JAVA_TOOL_OPTIONS --root insta485/html

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--title-->
+    <title>insta485</title>
+    <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+    <!--link upper left-->
+    <a href="/" style="float: left">
+        Welcome to <br />
+        Insta485!
+    </a>
+    <!--link upper right-->
+    <a href="/explore/" style="float: right"> explore</a><br />
+    <a href="/users/{{logname}}/" style="float: right">{{logname}}</a><br /><hr />
+    <main>
+    <h1>Followers</h1>
+    {% for follower in followers %}
+    <div class = "followers">
+        <img src="{{follower.user_img_url}}" alt="{{follower.username}}"><a href="/users/{{follower.username}}/">
+        <div style="float: right; color: grey;">
+            {% if follower.username != logname %}
+                {% if follower.logname_follows_username %}
+                    <p>following</p>
+                {% else %}
+                    <p>not following</p>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+    </main>
+</body>
+</html>

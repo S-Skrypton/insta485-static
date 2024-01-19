@@ -13,27 +13,30 @@
     <!--link upper right-->
     <a href="/explore/" target="_blank" style="float: right;"> 
         explore
-    </a>
-    <br>
-    <a href="/users/awdeorio/" style="float: right;">
-        awdeorio
-    </a>
-    <br>
-    <hr>
+    </a><br>
+    <a href="/users/{{logname}}/" style="float: right;">
+        {{logname}}
+    </a><br><hr>
     <main>
         <h1>
-            awdeorio
+            {{username}}
         </h1><br>
         <p>
-            2 posts <a href="/users/awdeorio/followers/">2 followers</a> <a href="/users/awdeorio/following/">2 following</a><br>
-            Andrew DeOrio
+            {% if username != logname %}
+                {% if logname_follows_username %}
+                    <p>following</p>
+                {% else %}
+                    <p>not following</p>
+                {% endif %}
+            {% endif %}
+            {{total_posts}} posts <a href="/users/{{username}}/followers/">{{followers}} followers</a> <a href="/users/{{username}}/following/">{{following}} following</a><br>
+            {{fullname}}
         </p><br>
-        <a href="/posts/1/">
-            <img src="/uploads/122a7d27ca1d7420a1072f695d9290fad4501a41.jpg" alt="aw's post 1">
+        {% for apost in posts %}
+        <a href="/posts/{{apost.postid}}/">
+            <img src="{{apost.img_url}}" alt="{{username}}'s post 1">
         </a>
-        <a href="/posts/3/">
-            <img src="/uploads/9887e06812ef434d291e4936417d125cd594b38a.jpg" alt="aw's post 3">
-        </a>
+        {% endfor %}
     </main>
 </body>
 </html>
