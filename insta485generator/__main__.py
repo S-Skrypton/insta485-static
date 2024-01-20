@@ -1,9 +1,10 @@
 """Build static HTML site from directory of HTML templates and plain files."""
 import pathlib
+import json
 import shutil
+import sys
 import click
 import jinja2
-import json
 
 
 # read configuration file
@@ -11,12 +12,12 @@ def read_config(config_filename):
     """Read configuration file and return it."""
     config_filename = pathlib.Path(config_filename)
     try:
-        with config_filename.open() as config_file:
+        with config_filename.open(encoding='utf-8') as config_file:
             return json.load(config_file)
     except FileNotFoundError:
         click.echo(f"insta485generator error: '{config_filename}' not found",
                    err=True)
-        exit(1)
+        sys.exit(1)
 
 
 @click.command()
@@ -54,7 +55,7 @@ def main(input_dir, output, verbose):
             except jinja2.TemplateError as e:
                 click.echo("insta485generator error:" +
                            f" '{temp_name}'\n{e.message}", err=True)
-                exit(1)
+                sys.exit(1)
             # write rendered content to output file
             output_file = output_dir/item["url"].lstrip("/")/"index.html"
             # Check if the output directory already exists
@@ -68,16 +69,16 @@ def main(input_dir, output, verbose):
             # copy static directory
         static_dir = input_dir / 'static'
         if static_dir.exists():
-        # shutil.copy() is very useful for copying directories
+            # shutil.copy() is very useful for copying directories
             shutil.copytree(static_dir, output_dir, dirs_exist_ok=True)
         if verbose:
             print(f"Copied {static_dir} -> {output_dir}")
     except json.JSONDecodeError as e:
         click.echo(f"insta485generator error: '{config}'\n{e.msg}", err=True)
-        exit(1)
+        sys.exit(1)
     except FileExistsError as e:
         click.echo(f"insta485generator error: {e}", err=True)
-        exit(1)
+        sys.exit(1)
 
 
 # ==============================main=============================================

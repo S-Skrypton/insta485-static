@@ -18,8 +18,9 @@
     <main>
         <h1>Discover People</h1><br>
         {% for person in not_following %}
-        <div class = "followers">
-            <img src="{{person.user_img_url}}" alt="{{person.username}}"><a href="/users/{{person.username}}/">
+        <div class = "people">
+            <img src="{{person.user_img_url}}" alt="{{person.username}}">
+            <a href="/users/{{person.username}}/">{{person.username}}</a>
         </div>
         {% endfor %}
     </main>

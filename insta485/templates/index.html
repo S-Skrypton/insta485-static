@@ -27,7 +27,7 @@
                 />
                 {{apost.owner}}
             </a>
-            <a href="/posts/{{apost.postid}}/" style="float: right"> 10 minutes ago </a><br />
+            <a href="/posts/{{apost.postid}}/" style="float: right"> {{apost.timestamp}} </a><br />
             <hr />
             <!--post-->
             <img
@@ -35,16 +35,16 @@
                 alt="post{{apost.postid}}"
             />
             <p>{{apost.likes}}             
-                {% if apost.likes > 1 %}
-                    likes<br />
-                {% else %}
+                {% if apost.likes == 1 %}
                     like<br />
+                {% else %}
+                    likes<br />
                 {% endif %}
             </p>
             <!--comments-->
             <p>
                 {% for comment in apost.comments %}
-                <a href="/users/{{comment.owner}}/">{{comment.owner}}</a> {{comment.text}}<br>
+                <a href="/users/{{comment.owner}}/">{{comment.owner}}</a> {{comment.text}}<br />
                 {% endfor %}
             </p>
         </div>

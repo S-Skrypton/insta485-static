@@ -24,12 +24,24 @@
         <p>
             {% if username != logname %}
                 {% if logname_follows_username %}
-                    <p>following</p>
+                    following
                 {% else %}
-                    <p>not following</p>
+                    not following
                 {% endif %}
+            {% endif %}<br>
+            {{total_posts}} 
+            {% if total_posts == 1 %}
+                post 
+            {% else %}
+                posts 
             {% endif %}
-            {{total_posts}} posts <a href="/users/{{username}}/followers/">{{followers}} followers</a> <a href="/users/{{username}}/following/">{{following}} following</a><br>
+            <a href="/users/{{username}}/followers/">{{followers}} 
+                {% if followers == 1 %}
+                    follower
+                {% else %}
+                    followers
+                {% endif %}
+            </a> <a href="/users/{{username}}/following/">{{following}} following</a><br>
             {{fullname}}
         </p><br>
         {% for apost in posts %}
